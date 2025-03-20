@@ -1,0 +1,8 @@
+{% for message in messages %}
+<div class="message-bubble rounded-lg p-4 {% if message.role == 'user' %}user-message{% else %}assistant-message{% endif %}">
+    <p>{{ message.content }}</p>
+    {% if message.emotion %}
+    <span class="emotion-tag mt-2 inline-block">Эмоция: {{ message.emotion }}</span>
+    {% endif %}
+</div>
+{% endfor %} 

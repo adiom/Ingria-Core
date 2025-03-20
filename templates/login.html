@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+
+{% block title %}Вход в Ingria Router{% endblock %}
+
+{% block content %}
+<div class="flex justify-center">
+    <div class="w-full max-w-md">
+        <div class="bg-white shadow-md rounded-lg px-8 pt-6 pb-8 mb-4">
+            <h2 class="text-2xl font-bold mb-6 text-center">Вход в систему</h2>
+            
+            {% if error %}
+            <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4">
+                <p>{{ error }}</p>
+            </div>
+            {% endif %}
+            
+            <form method="post" action="/login">
+                <div class="mb-4">
+                    <label class="block text-gray-700 text-sm font-bold mb-2" for="api_key">
+                        API ключ OpenRouter
+                    </label>
+                    <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                           id="api_key" name="api_key" type="password" placeholder="sk-or-v1-xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx">
+                    <p class="text-gray-500 text-xs mt-1">Введите ваш API ключ OpenRouter</p>
+                </div>
+                
+                <div class="flex items-center justify-between">
+                    <button class="gradient-bg text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline" type="submit">
+                        Войти
+                    </button>
+                    <a class="inline-block align-baseline font-bold text-sm text-blue-500 hover:text-blue-800" href="/register">
+                        Зарегистрироваться
+                    </a>
+                </div>
+            </form>
+        </div>
+        <p class="text-center text-gray-500 text-xs">
+            API ключ используется только для выполнения запросов к моделям ИИ через OpenRouter
+        </p>
+    </div>
+</div>
+{% endblock %} 

@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Ingria Router{% endblock %}</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <script src="https://unpkg.com/htmx.org@1.9.10"></script>
+    <style>
+        .gradient-bg {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+    </style>
+    {% block extra_head %}{% endblock %}
+</head>
+<body class="bg-gray-100 min-h-screen">
+    <nav class="gradient-bg text-white shadow-lg">
+        <div class="container mx-auto px-6 py-4">
+            <div class="flex items-center justify-between">
+                <div class="flex items-center">
+                    <a href="/" class="text-2xl font-bold">Ingria Router</a>
+                </div>
+                <div class="flex items-center space-x-4">
+                    {% if user %}
+                        <a href="/dashboard" class="hover:text-gray-200">Панель управления</a>
+                        <a href="/chat" class="hover:text-gray-200">Чат</a>
+                        <a href="/analytics" class="hover:text-gray-200">Аналитика</a>
+                        <form action="/logout" method="post" class="inline">
+                            <button type="submit" class="hover:text-gray-200">Выход</button>
+                        </form>
+                    {% else %}
+                        <a href="/login" class="hover:text-gray-200">Вход</a>
+                        <a href="/register" class="hover:text-gray-200">Регистрация</a>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <main class="container mx-auto px-6 py-8">
+        {% block content %}{% endblock %}
+    </main>
+
+    <footer class="gradient-bg text-white mt-12">
+        <div class="container mx-auto px-6 py-4">
+            <div class="text-center">
+                <p>&copy; 2024 Ingria Router. Все права защищены.</p>
+            </div>
+        </div>
+    </footer>
+
+    {% block extra_scripts %}{% endblock %}
+</body>
+</html> 

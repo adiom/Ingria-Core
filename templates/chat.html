@@ -1,0 +1,91 @@
+{% extends "base.html" %}
+
+{% block title %}Чат с Ингрией{% endblock %}
+
+{% block extra_head %}
+<style>
+    .chat-container {
+        height: calc(100vh - 300px);
+    }
+    .message-bubble {
+        max-width: 80%;
+        margin-bottom: 1rem;
+    }
+    .user-message {
+        background-color: #e2e8f0;
+        margin-left: auto;
+    }
+    .assistant-message {
+        background-color: #667eea;
+        color: white;
+        margin-right: auto;
+    }
+    .emotion-tag {
+        font-size: 0.8rem;
+        padding: 0.2rem 0.5rem;
+        border-radius: 1rem;
+        background-color: rgba(255, 255, 255, 0.2);
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="bg-white rounded-lg shadow-lg p-6">
+    <div class="chat-container flex flex-col space-y-4 overflow-y-auto mb-6">
+        <div id="chat-messages" class="flex-1">
+            {% for message in messages %}
+            <div class="message-bubble rounded-lg p-4 {% if message.role == 'user' %}user-message{% else %}assistant-message{% endif %}">
+                <p>{{ message.content }}</p>
+                {% if message.emotion %}
+                <span class="emotion-tag mt-2 inline-block">Эмоция: {{ message.emotion }}</span>
+                {% endif %}
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+    
+    <form hx-post="/chat/send" hx-target="#chat-messages" hx-swap="beforeend" class="flex space-x-4">
+        <input type="text" 
+               name="message" 
+               class="flex-1 rounded-lg border border-gray-300 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+               placeholder="Введите сообщение..."
+               required>
+        <button type="submit" 
+                class="gradient-bg text-white px-6 py-2 rounded-lg hover:opacity-90 transition-opacity">
+            Отправить
+        </button>
+    </form>
+
+    <div class="mt-6">
+        <h3 class="text-lg font-semibold mb-2">Статистика</h3>
+        <div class="grid grid-cols-3 gap-4">
+            <div class="bg-gray-100 p-4 rounded-lg">
+                <p class="text-sm text-gray-600">Всего сообщений</p>
+                <p class="text-2xl font-bold" id="total-messages">{{ stats.total_messages }}</p>
+            </div>
+            <div class="bg-gray-100 p-4 rounded-lg">
+                <p class="text-sm text-gray-600">Токенов использовано</p>
+                <p class="text-2xl font-bold" id="total-tokens">{{ stats.total_tokens }}</p>
+            </div>
+            <div class="bg-gray-100 p-4 rounded-lg">
+                <p class="text-sm text-gray-600">Среднее время ответа</p>
+                <p class="text-2xl font-bold" id="avg-response-time">{{ "%.2f"|format(stats.avg_response_time) }}s</p>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_scripts %}
+<script>
+    const chatMessages = document.getElementById('chat-messages');
+    
+    // Прокрутка чата вниз при загрузке и новых сообщениях
+    function scrollToBottom() {
+        chatMessages.scrollTop = chatMessages.scrollHeight;
+    }
+    
+    document.addEventListener('DOMContentLoaded', scrollToBottom);
+    document.body.addEventListener('htmx:afterSwap', scrollToBottom);
+</script>
+{% endblock %} 
